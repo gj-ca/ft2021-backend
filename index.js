@@ -1,16 +1,36 @@
 require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const app = express()
+const mongoose = require("mongoose")
+const { CategoryModel } = require("./models/Category")
+const { ProductModel } = require("./models/Product")
 
-app.use(cors({
-    origin: process.env.ORIGIN
-}))
+function runSeedFile() {
+    return new Promise(async (resolve, reject) => {
+        // await CategoryModel.insertMany([{
+        //     name: "blah"
+        // }])
+        await ProductModel.insertMany([{
+            // name: "foo"
+        }])
+        resolve("Success")
+    })
+    
+}
 
-app.get("/", (req, res) => {
-    res.sendStatus(200)
+mongoose.connect("mongodb+srv://foo:bar@cluster0.odzgu.mongodb.net/ft2021MERN?retryWrites=true&w=majority", {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useFindAndModify: false
 })
-
-app.use("/products", require("./routes/products"))
-
-app.listen(5000, () => console.log("Running on port 5000"))
+    .then(async () => {
+        // Shitty seed check
+        pCount = await ProductModel.count()
+        cCount = await CategoryModel.count()
+        if (pCount == 0 || cCount == 0) {
+            ProductModel.remove()
+            CategoryModel.remove()
+            await runSeedFile()
+            console.log("Successfully Seeded")
+        }
+        require("./server")
+    })
+    .catch(err => console.log(err))
