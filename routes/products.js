@@ -2,10 +2,8 @@ const express = require("express")
 const router = express.Router()
 const bodyParser = require("body-parser") 
 const {ProductModel} = require("../models/Product")
-const upload = require('../multer')
-const cloudinary = require("../cloudinary")
-
-
+const upload = require('../utils/multer')
+const cloudinary = require("../utils/cloudinary")
 
 router.get("/", async (req, res) => {
     const products = await ProductModel.find()
