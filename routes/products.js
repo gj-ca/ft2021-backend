@@ -2,19 +2,8 @@ const express = require("express")
 const router = express.Router()
 const bodyParser = require("body-parser") 
 const {ProductModel} = require("../models/Product")
-const { CategoryModel } = require("../models/Category")
-
-// MiddleWare - Should be exported to separate file
-// function findById(req, res, next) {
-//     // connection to a database
-//     req.product = productsArray.find(p => p.id == req.params.id)
-//     next()
-// }
 
 router.get("/", async (req, res) => {
-    // ProductModel.find().then(products => {
-    //     res.send(products)
-    // })
     const products = await ProductModel.find()
     res.send(products)
 })
@@ -36,24 +25,13 @@ router.get("/:id", async (req, res) => {
 })
 
 // Create
-router.post("/", bodyParser.json(), (req, res) => {
-    // ProductModel.create({
-    //     name: req.body.name,
-    //     desc: req.body.description,
-    //     quantity: req.body.quantity
-    // }, (err, doc) => {
-    //     if (err) {
-    //         res.status(422).send(err)
-    //     } else {
-    //         res.status(201).send(doc)
-    //     }
-    // })
+router.post("/", bodyParser.json(), async (req, res) => {
     ProductModel.create({
         name: req.body.name,
         desc: req.body.description,
         quantity: req.body.quantity,
         category: req.body.category
-    })
+    })  
     .then(doc => res.status(201).send(doc))
     .catch(err => res.status(422).send(err))
 })
