@@ -2,18 +2,10 @@ const express = require("express")
 const router = express.Router()
 const bodyParser = require("body-parser") 
 const {ProductModel} = require("../models/Product")
-const multer = require("multer")
-const cloudinary = require("cloudinary")
+const upload = require('../multer')
+const cloudinary = require("../cloudinary")
 
-upload = multer({
-    storage: multer.diskStorage({})
-})
 
-cloudinary.config({
-    cloud_name: "yeetusthegreetest",
-    api_key: 488443588984296,
-    api_secret: "epD9A4e-CP3wIf-UH_m8JtS7ICI"
-})
 
 router.get("/", async (req, res) => {
     const products = await ProductModel.find()
