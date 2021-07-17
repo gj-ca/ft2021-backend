@@ -3,31 +3,33 @@ const Schema = mongoose.Schema
 const {CategoryModel} = require("./Category")
 
 const ProductSchema = new Schema({
-    // name: {
-    //     type: String,
-    //     required: true,
-    //     validate: {
-    //         validator: name => {
-    //             if (name.includes("fuck")) {
-    //                 return false
-    //             }
-    //         },
-    //         message: "No naughty words"
-    //     }
-    // },
+    name: {
+        type: String,
+        required: true,
+        validate: {
+            validator: name => {
+                if (name.includes("fuck")) {
+                    return false
+                }
+            },
+            message: "No naughty words"
+        }
+    },
     description: {
         type: String,
         default: "No description yet!"
     },
-    // quantity: {
-    //     type: Number,
-    //     min: 0
-    // },
-    // category: {
-    //     type: Schema.Types.ObjectId,
-    //     required: true,
-    //     ref: "Category"
-    // }
+    quantity: {
+        type: Number,
+        min: 0
+    },
+    category: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "Category"
+    },
+    imageUrl: String,
+    cloudinaryId: String,
 })
 
 ProductSchema.post("save", async (document, next) => {

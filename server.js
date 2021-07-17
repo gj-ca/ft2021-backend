@@ -4,6 +4,7 @@ const cors = require("cors")
 const { CategoryModel } = require("./models/Category")
 
 
+
 app.use(cors({
     origin: process.env.ORIGIN
 }))
