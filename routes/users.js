@@ -4,8 +4,7 @@ const passport = require("passport")
 const router = express.Router()
 const {UserModel} = require("../models/User")
 
-router.post("/sign_up", bodyParser.json(), (req,res) => {
-    // console.log(req.body)
+router.post("/sign_up", (req,res) => {
     UserModel.register(req.body, req.body.password, (err, user) => {
         if (err) {
             res.status(401).send({message: err.message})
@@ -18,9 +17,21 @@ router.post("/sign_up", bodyParser.json(), (req,res) => {
     // .catch(() => console.log("There was an error"))
 })
 
-router.post("/login", bodyParser.json(), (req,res) => {
-    console.log(req.body)
-    res.sendStatus(200)
+router.post("/login", passport.authenticate('local'), (req,res) => {
+    res.status(200).send({username: req.user.username, _id: req.body._id})
+})
+
+router.get("/logout", (req, res) => {
+    req.logout()
+    res.send(200)
+})
+
+router.get("/me", (req,res) => {
+    if (req.user) {
+        res.status(200).send({username: req.user.username, _id: req.user.id})
+    } else {
+        res.sendStatus(401)
+    }
 })
 
 

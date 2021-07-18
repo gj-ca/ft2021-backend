@@ -5,14 +5,21 @@ const { CategoryModel } = require("./models/Category")
 const cookieParser = require("cookie-parser")
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require("passport")
+const bodyParser = require("body-parser")
+const {UserModel} = require('./models/User');
  
+passport.use(UserModel.createStrategy());
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
+
 app.use(cors({
     origin: process.env.ORIGIN,
     credentials: true
 }))
 
 app.use(session({
-        secret: "this is our little secret",
+        secret: "secret",
         resave: true,
         saveUninitialized: true,
         store: MongoStore.create({
@@ -20,9 +27,11 @@ app.use(session({
         })
 }))
 
-app.use(cookieParser("this is our little secret"))
+app.use(cookieParser("secret"))
+app.use(bodyParser.json())
 
-require("./utils/passport")
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.get("/", (req, res) => {
     res.sendStatus(200)
